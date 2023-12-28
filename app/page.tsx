@@ -4,7 +4,7 @@ import { useState } from 'react';
 import io from "socket.io-client";
 import { v4 as uuidv4 } from 'uuid';
 
-const socket = io("http://localhost:5000");
+const socket = io(process.env.NEXT_PUBLIC_SOCKET_SERVER || "http//:localhost:5000");
 
 export default function Home() {
   const [message, setMessage] = useState<string>("");
