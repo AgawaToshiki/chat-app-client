@@ -1,5 +1,4 @@
 "use client"
-import Image from 'next/image';
 import { useState } from 'react';
 import io from "socket.io-client";
 import { v4 as uuidv4 } from 'uuid';
