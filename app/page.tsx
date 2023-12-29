@@ -3,7 +3,7 @@ import { useState } from 'react';
 import io from "socket.io-client";
 import { v4 as uuidv4 } from 'uuid';
 
-const socket = io(process.env.NEXT_PUBLIC_SOCKET_SERVER || "http://localhost:5000");
+const socket = io(`${process.env.NEXT_PUBLIC_SOCKET_SERVER}`);
 
 export default function Home() {
   const [message, setMessage] = useState<string>("");
@@ -19,9 +19,8 @@ export default function Home() {
   socket.on("received_message", (data) => {
     setList([...list, data]);
   })
-
+  
   console.log(list);
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <div className="w-[500px] mx-auto">
