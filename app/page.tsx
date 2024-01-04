@@ -1,4 +1,5 @@
 "use client"
+import Link from 'next/link';
 import { useState } from 'react';
 import io from "socket.io-client";
 import { v4 as uuidv4 } from 'uuid';
@@ -6,31 +7,32 @@ import { v4 as uuidv4 } from 'uuid';
 const socket = io(`${process.env.NEXT_PUBLIC_SOCKET_SERVER}`);
 
 export default function Home() {
-  const [message, setMessage] = useState<string>("");
-  const [list, setList] = useState<{ message: string, id: string }[]>([]);
-  const handleSendMessage = () => {
+  const [title, setTitle] = useState<string>("");
+  const [list, setList] = useState<{ title: string, id: string }[]>([]);
+  const handleCreateThread = () => {
     //サーバーへ送信
     const id = uuidv4();
-    socket.emit("send_message", { message: message, id: id })
-    setMessage("");
+    socket.emit("create_thread", { title: title, id: id })
+    setTitle("");
   }
 
   //サーバーから受信
-  socket.on("received_message", (data) => {
+  socket.on("received_thread", (data) => {
     setList([...list, data]);
   })
+
   
   console.log(list);
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <div className="w-[500px] mx-auto">
-        <h1>チャットアプリ</h1>
+      <h1>掲示板</h1>
         <div>
-          <input type="text" onChange={ (e) => setMessage(e.target.value) } value={ message } placeholder="chat" className="border"/>
-          <button onClick={ () => handleSendMessage() } className="border">送信</button>
+          <input type="text" onChange={ (e) => setTitle(e.target.value) } value={ title } placeholder="新規スレッド名" className="border"/>
+          <button onClick={ () => handleCreateThread() } className="border">新規スレッド作成</button>
         </div>
-        {list.map((chat) => (
-          <div key={chat.id}>{ chat.message }</div>
+        {list.map((thread) => (
+          <Link key={ thread.id } href={`/threads/${thread.id}`}>{ thread.title }</Link>
         ))}
       </div>
     </div>
