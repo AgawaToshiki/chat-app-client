@@ -18,10 +18,9 @@ export default function Home() {
 
   //サーバーから受信
   socket.on("received_thread", (data) => {
-    setList([...list, data]);
+    setList([...data]);
   })
 
-  
   console.log(list);
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
@@ -32,7 +31,7 @@ export default function Home() {
           <button onClick={ () => handleCreateThread() } className="border">新規スレッド作成</button>
         </div>
         {list.map((thread) => (
-          <Link key={ thread.id } href={`/threads/${thread.id}`}>{ thread.title }</Link>
+          <Link key={ thread.id } href={`/threads/${thread.id}`} className="flex flex-col">{ thread.title }</Link>
         ))}
       </div>
     </div>
