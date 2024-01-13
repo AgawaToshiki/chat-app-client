@@ -9,19 +9,19 @@ const Threads = ({ params }: { params: { id: string }}) => {
 
   const [message, setMessage] = useState<string>("");
   const [name, setName] = useState<string>("");
-  const [list, setList] = useState<{ message: string, id: string, username: string }[]>([]);
+  const [list, setList] = useState<{ message: string, id: string, username: string, threadId: string }[]>([]);
   const handleSendMessage = () => {
     //サーバーへ送信
     const id = uuidv4();
-    socket.emit("send_message", { message: message, id: id, threadId: params.id, username: name })
+    socket.emit("send_message", { message: message, id: id, username: name, threadId: params.id })
     setName("");
     setMessage("");
   }
 
   //サーバーから受信
   useEffect(() => {
-    socket.on("received_message", (data) => {
-      setList([...data]);
+    socket.on("received_message", (data: { message: string, id: string, username: string, threadId: string }) => {
+      setList((prev) => [...prev, data]);
     })
   }, [])
 

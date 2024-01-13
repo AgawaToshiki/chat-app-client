@@ -1,7 +1,7 @@
 "use client"
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import io from "socket.io-client";
+import { io } from "socket.io-client";
 import { v4 as uuidv4 } from 'uuid';
 
 const socket = io(`${process.env.NEXT_PUBLIC_SOCKET_SERVER}`);
@@ -17,7 +17,7 @@ export default function Home() {
   }
   useEffect(() => {
     //サーバーから受信
-    socket.on("received_thread", (data) => {
+    socket.on("received_thread", (data: { title: string, id: string }[]) => {
       setList([...data]);
   })
 
